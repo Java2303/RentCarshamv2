@@ -1,0 +1,48 @@
+﻿@model IEnumerable<RentCarsham.Models.Vehiculo>
+
+@{
+    ViewData["Title"] = "Vehículos en Alquiler";
+}
+
+<header class="custom-header py-4">
+    <h1 class="display-5 text-white">Vehículos Disponibles para Alquiler</h1>
+    <p class="lead text-white">Encuentra el vehículo ideal para tu viaje</p>
+</header>
+
+<p class="text-right">
+    <a asp-action="Create" class="btn btn-success">Agregar Nuevo Vehículo</a>
+</p>
+
+<table class="table table-striped table-hover rounded shadow">
+    <thead class="thead-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Anio)</th>
+            <th>@Html.DisplayNameFor(model => model.PrecioPorDia)</th>
+            <th>@Html.DisplayNameFor(model => model.Disponible)</th>
+            <th>@Html.DisplayNameFor(model => model.Placa)</th>
+            <th>@Html.DisplayNameFor(model => model.Kilometraje)</th>
+            <th>@Html.DisplayNameFor(model => model.Marca.MarcaId)</th>
+            <th>@Html.DisplayNameFor(model => model.Modelo.ModeloId)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Anio)</td>
+                <td>@Html.DisplayFor(modelItem => item.PrecioPorDia)</td>
+                <td>@Html.DisplayFor(modelItem => item.Disponible)</td>
+                <td>@Html.DisplayFor(modelItem => item.Placa)</td>
+                <td>@Html.DisplayFor(modelItem => item.Kilometraje)</td>
+                <td>@Html.DisplayFor(modelItem => item.Marca.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Modelo.Nombre)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.VehiculoId" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.VehiculoId" class="btn btn-info btn-sm">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.VehiculoId" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,47 @@
+﻿@model RentCarsham.Models.Vehiculo
+
+@{
+    ViewData["Title"] = "Eliminar Vehículo";
+}
+<header class="custom-header py-4">
+    <h1 class="display-5 text-white">Eliminar Vehículo</h1>
+</header>
+<div class="container">
+    <div class="card shadow-lg rounded">
+        <div class="card-body">
+            <h4 class="card-title text-danger">¿Estás seguro de que deseas eliminar este vehículo?</h4>
+            <hr />
+
+            <dl class="row">
+                <dt class="col-sm-3 font-weight-bold text-dark">Año:</dt>
+                <dd class="col-sm-9 text-muted">@Html.DisplayFor(model => model.Anio)</dd>
+
+                <dt class="col-sm-3 font-weight-bold text-dark">Precio por Día:</dt>
+                <dd class="col-sm-9 text-muted">@Html.DisplayFor(model => model.PrecioPorDia)</dd>
+
+                <dt class="col-sm-3 font-weight-bold text-dark">Disponibilidad:</dt>
+                <dd class="col-sm-9 text-muted">@Html.DisplayFor(model => model.Disponible)</dd>
+
+                <dt class="col-sm-3 font-weight-bold text-dark">Placa:</dt>
+                <dd class="col-sm-9 text-muted">@Html.DisplayFor(model => model.Placa)</dd>
+
+                <dt class="col-sm-3 font-weight-bold text-dark">Kilometraje:</dt>
+                <dd class="col-sm-9 text-muted">@Html.DisplayFor(model => model.Kilometraje)</dd>
+
+                <dt class="col-sm-3 font-weight-bold text-dark">Marca:</dt>
+                <dd class="col-sm-9 text-muted">@Html.DisplayFor(model => model.Marca.Nombre)</dd>
+
+                <dt class="col-sm-3 font-weight-bold text-dark">Modelo:</dt>
+                <dd class="col-sm-9 text-muted">@Html.DisplayFor(model => model.Modelo.Nombre)</dd>
+            </dl>
+
+            <div class="text-center">
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="VehiculoId" />
+                    <button type="submit" class="btn btn-danger btn-lg">Eliminar Vehículo</button>
+                    <a asp-action="Index" class="btn btn-info btn-lg ml-2">Volver a la Lista</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

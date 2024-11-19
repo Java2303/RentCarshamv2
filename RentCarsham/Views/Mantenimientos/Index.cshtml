@@ -1,0 +1,44 @@
+﻿@model IEnumerable<RentCarsham.Models.Mantenimiento>
+
+@{
+    ViewData["Title"] = "Mantenimientos";
+}
+
+<header class="custom-header py-4">
+    <h1 class="display-5 text-white">Historial de Mantenimientos</h1>
+    <p class="lead text-white">Gestiona los mantenimientos de los vehículos</p>
+</header>
+
+<p class="text-right">
+    <a asp-action="Create" class="btn btn-success">Agregar Nuevo Mantenimiento</a>
+</p>
+
+<table class="table table-striped table-hover rounded shadow">
+    <thead class="thead-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.TipoMantenimiento)</th>
+            <th>@Html.DisplayNameFor(model => model.FechaMantenimiento)</th>
+            <th>@Html.DisplayNameFor(model => model.Costo)</th>
+            <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+            <th>@Html.DisplayNameFor(model => model.Vehiculo.Placa)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.TipoMantenimiento)</td>
+                <td>@Html.DisplayFor(modelItem => item.FechaMantenimiento)</td>
+                <td>@Html.DisplayFor(modelItem => item.Costo)</td>
+                <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                <td>@Html.DisplayFor(modelItem => item.Vehiculo.Placa)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MantenimientoId" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.MantenimientoId" class="btn btn-info btn-sm">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.MantenimientoId" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

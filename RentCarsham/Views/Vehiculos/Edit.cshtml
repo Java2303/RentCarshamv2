@@ -1,0 +1,90 @@
+﻿@model RentCarsham.Models.Vehiculo
+
+@{
+    ViewData["Title"] = "Editar Vehículo";
+}
+
+<header class="custom-header py-4">
+    <h1 class="display-5 text-white">Editar Vehículo</h1>
+</header>
+<div class="container">
+    <div class="card shadow-lg rounded">
+        <div class="card-body">
+            <h4 class="card-title text-dark mb-4">Información del Vehículo</h4>
+
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
+
+                <input type="hidden" asp-for="VehiculoId" />
+
+                <!-- Marca Dropdown -->
+                <div class="form-group">
+                    <label asp-for="MarcaId" class="font-weight-bold text-dark">Marca</label>
+                    <select asp-for="MarcaId" class="form-control" asp-items="ViewBag.MarcaId">
+                        <option value="">Seleccionar Marca</option>
+                    </select>
+                    <span asp-validation-for="MarcaId" class="text-danger"></span>
+                </div>
+
+                <!-- Modelo Dropdown -->
+                <div class="form-group">
+                    <label asp-for="ModeloId" class="font-weight-bold text-dark">Modelo</label>
+                    <select asp-for="ModeloId" class="form-control" asp-items="ViewBag.ModeloId">
+                        <option value="">Seleccionar Modelo</option>
+                    </select>
+                    <span asp-validation-for="ModeloId" class="text-danger"></span>
+                </div>
+
+                <!-- Año -->
+                <div class="form-group">
+                    <label asp-for="Anio" class="font-weight-bold text-dark">Año</label>
+                    <input asp-for="Anio" class="form-control" />
+                    <span asp-validation-for="Anio" class="text-danger"></span>
+                </div>
+
+                <!-- Precio por Día -->
+                <div class="form-group">
+                    <label asp-for="PrecioPorDia" class="font-weight-bold text-dark">Precio por Día</label>
+                    <input asp-for="PrecioPorDia" class="form-control" />
+                    <span asp-validation-for="PrecioPorDia" class="text-danger"></span>
+                </div>
+
+                <!-- Disponibilidad -->
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Disponible" /> @Html.DisplayNameFor(model => model.Disponible)
+                    </label>
+                </div>
+
+                <!-- Placa -->
+                <div class="form-group">
+                    <label asp-for="Placa" class="font-weight-bold text-dark">Placa</label>
+                    <input asp-for="Placa" class="form-control" oninput="this.value = this.value.toUpperCase()" />
+                    <span asp-validation-for="Placa" class="text-danger"></span>
+                </div>
+
+                <!-- Kilometraje -->
+                <div class="form-group">
+                    <label asp-for="Kilometraje" class="font-weight-bold text-dark">Kilometraje</label>
+                    <input asp-for="Kilometraje" class="form-control" />
+                    <span asp-validation-for="Kilometraje" class="text-danger"></span>
+                </div>
+
+                <!-- Botón de Guardar -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-lg w-100">Guardar Cambios</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-4">
+                <a asp-action="Index" class="btn btn-info btn-lg">Volver a la lista</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

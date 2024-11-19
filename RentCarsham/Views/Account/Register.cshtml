@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Registro";
+}
+<link href="~/css/site.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="custom-header text-white mb-5">
+        <h1>Registro</h1>
+        <p class="lead">Únete a nuestra comunidad</p>
+    </div>
+
+    <div class="card shadow-lg rounded">
+        <div class="card-header" style="background: linear-gradient(90deg, #ff0000, #000000);">
+            <h3 class="text-white text-center mb-3">CREAR UNA CUENTA</h3>
+            <p class="lead text-white text-center mb-0">Ingresa tus datos para comenzar</p>
+        </div>
+        <div class="card-body p-4">
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="nombre" class="text-uppercase fw-bold">Nombre</label>
+                            <input type="text" id="nombre" name="nombre"
+                                   class="form-control rounded shadow-sm"
+                                   required
+                                   placeholder="Ingresa tu nombre completo" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="email" class="text-uppercase fw-bold">Correo electrónico</label>
+                            <input type="email" id="email" name="email"
+                                   class="form-control rounded shadow-sm"
+                                   required
+                                   placeholder="ejemplo@correo.com" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="telefono" class="text-uppercase fw-bold">Teléfono</label>
+                            <input type="tel" id="telefono" name="telefono"
+                                   class="form-control rounded shadow-sm"
+                                   required
+                                   placeholder="+XX XXXXXXXXXX" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="documentoIdentidad" class="text-uppercase fw-bold">Documento de Identidad</label>
+                            <input type="text" id="documentoIdentidad" name="documentoIdentidad"
+                                   class="form-control rounded shadow-sm"
+                                   required
+                                   placeholder="Ingresa tu documento" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label for="rol" class="text-uppercase fw-bold">Rol</label>
+                            <select id="rol" name="rol" class="form-control rounded shadow-sm" required>
+                                <option value="">Selecciona un Rol</option>
+                                <option value="Cliente">Cliente</option>
+                                <option value="Admin">Administrador</option>
+                                <option value="Empleado">Empleado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="direccion" class="text-uppercase fw-bold">Dirección</label>
+                    <input type="text" id="direccion" name="direccion"
+                           class="form-control rounded shadow-sm"
+                           required
+                           placeholder="Ingresa tu dirección completa" />
+                </div>
+
+                <button type="submit" class="button w-100 mt-4">
+                    <span class="text-white">REGISTRARSE</span>
+                </button>
+
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <div class="alert alert-danger mt-3 rounded shadow-sm">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+            </form>
+        </div>
+        <div class="card-footer text-center py-3" style="background: #f8f9fa;">
+            <p class="mb-0">
+                ¿Ya tienes una cuenta?
+                <a href="/Account/Login" class="text-danger fw-bold text-decoration-none">
+                    Inicia sesión
+                </a>
+            </p>
+        </div>
+    </div>
+</div>

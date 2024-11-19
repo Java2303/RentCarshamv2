@@ -1,0 +1,44 @@
+﻿@model IEnumerable<RentCarsham.Models.Modelo>
+
+@{
+    ViewData["Title"] = "Modelos de Vehículos";
+}
+
+<header class="custom-header py-4">
+    <h1 class="display-5 text-white">Modelos Disponibles</h1>
+    <p class="lead text-white">Descubre nuestros modelos de vehículos para alquilar</p>
+</header>
+
+<p class="text-right">
+    <a asp-action="Create" class="btn btn-success">Agregar Nuevo Modelo</a>
+</p>
+
+<table class="table table-striped table-hover rounded shadow">
+    <thead class="thead-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+            <th>@Html.DisplayNameFor(model => model.Caja)</th>
+            <th>@Html.DisplayNameFor(model => model.CapacidadPersonas)</th>
+            <th>@Html.DisplayNameFor(model => model.CapacidadMaletero)</th>
+            <th>@Html.DisplayNameFor(model => model.Marca.MarcaId)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Caja)</td>
+                <td>@Html.DisplayFor(modelItem => item.CapacidadPersonas)</td>
+                <td>@Html.DisplayFor(modelItem => item.CapacidadMaletero)</td>
+                <td>@Html.DisplayFor(modelItem => item.Marca.MarcaId)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ModeloId" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.ModeloId" class="btn btn-info btn-sm">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.ModeloId" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
