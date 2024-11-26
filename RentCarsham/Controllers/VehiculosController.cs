@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RentCarsham.Models;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Pdf;
+using System.IO;
+
 
 namespace RentCarsham.Controllers
 {
@@ -14,11 +19,13 @@ namespace RentCarsham.Controllers
     {
         private readonly RentCarshamContext _context;
         private readonly ILogger<VehiculosController> _logger;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public VehiculosController(RentCarshamContext context, ILogger<VehiculosController> logger)
+        public VehiculosController(RentCarshamContext context, ILogger<VehiculosController> logger, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _logger = logger;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Vehiculos
@@ -125,7 +132,7 @@ namespace RentCarsham.Controllers
             ViewData["MarcaId"] = new SelectList(_context.Marcas, "MarcaId", "Nombre", vehiculo.MarcaId);
             ViewData["ModeloId"] = new SelectList(_context.Modelos, "ModeloId", "Nombre", vehiculo.ModeloId);
 
-            return View(vehiculo); 
+            return View(vehiculo);
         }
 
 
@@ -200,5 +207,98 @@ namespace RentCarsham.Controllers
             }
             return Ok(vehiculo);
         }
+        [HttpGet("Vehiculos/ReportePdf")]
+        public async Task<IActionResult> GeneratePdfReport()
+        {
+            var vehiculos = await _context.Vehiculos
+                .Include(v => v.Marca)
+                .Include(v => v.Modelo)
+                .ToListAsync();
+
+            // Crear un documento PDF
+            PdfDocument document = new PdfDocument();
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+
+            // Fuentes
+            XFont fontTitle = new XFont("Arial Black", 24, XFontStyle.Bold);
+            XFont fontSubTitle = new XFont("Arial", 14, XFontStyle.Bold);
+            XFont fontBody = new XFont("Arial", 12, XFontStyle.Regular);
+            XFont fontTableHeader = new XFont("Arial", 12, XFontStyle.Bold);
+
+            // Colores
+            XBrush redBrush = XBrushes.Red;
+            XBrush blackBrush = XBrushes.Black;
+            XBrush grayBrush = XBrushes.LightGray;
+
+            int yPoint = 50;
+
+            // Agregar el logo
+            string logoPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "logo.png");
+            if (System.IO.File.Exists(logoPath))
+            {
+                XImage logo = XImage.FromFile(logoPath);
+                gfx.DrawImage(logo, 40, 20, 120, 60);
+                yPoint = 90;
+            }
+
+            // Título del reporte
+            gfx.DrawString("Reporte de Vehículos", fontTitle, redBrush, new XPoint(200, yPoint));
+            yPoint += 40;
+
+            // Fecha actual
+            string currentDate = DateTime.Now.ToString("dd/MM/yyyy");
+            gfx.DrawString($"Fecha: {currentDate}", fontSubTitle, blackBrush, new XPoint(40, yPoint));
+            yPoint += 30;
+
+            // Encabezado de la tabla
+            gfx.DrawRectangle(grayBrush, 40, yPoint, page.Width - 80, 25);
+            gfx.DrawString("ID", fontTableHeader, redBrush, new XPoint(50, yPoint + 18));
+            gfx.DrawString("Marca", fontTableHeader, redBrush, new XPoint(100, yPoint + 18));
+            gfx.DrawString("Modelo", fontTableHeader, redBrush, new XPoint(200, yPoint + 18));
+            gfx.DrawString("Año", fontTableHeader, redBrush, new XPoint(300, yPoint + 18));
+            gfx.DrawString("Placa", fontTableHeader, redBrush, new XPoint(350, yPoint + 18));
+            gfx.DrawString("Precio/Día", fontTableHeader, redBrush, new XPoint(450, yPoint + 18));
+            gfx.DrawString("Kilometraje", fontTableHeader, redBrush, new XPoint(550, yPoint + 18));
+            yPoint += 30;
+
+            // Agregar los datos de la tabla
+            foreach (var vehiculo in vehiculos)
+            {
+                gfx.DrawString(vehiculo.VehiculoId.ToString(), fontBody, blackBrush, new XPoint(50, yPoint));
+                gfx.DrawString(vehiculo.Marca.Nombre, fontBody, blackBrush, new XPoint(100, yPoint));
+                gfx.DrawString(vehiculo.Modelo.Nombre, fontBody, blackBrush, new XPoint(200, yPoint));
+                gfx.DrawString(vehiculo.Anio.ToString(), fontBody, blackBrush, new XPoint(300, yPoint));
+                gfx.DrawString(vehiculo.Placa, fontBody, blackBrush, new XPoint(350, yPoint));
+                gfx.DrawString($"{vehiculo.PrecioPorDia:C}", fontBody, blackBrush, new XPoint(450, yPoint));
+                gfx.DrawString($"{vehiculo.Kilometraje} km", fontBody, blackBrush, new XPoint(550, yPoint));
+
+                // Línea de separación
+                gfx.DrawLine(XPens.LightGray, 40, yPoint + 15, page.Width - 40, yPoint + 15);
+
+                yPoint += 20;
+
+                if (yPoint > page.Height - 50) // Salto de página
+                {
+                    page = document.AddPage();
+                    gfx = XGraphics.FromPdfPage(page);
+                    yPoint = 50;
+                }
+            }
+
+            // Marca de agua
+            gfx.TranslateTransform(page.Width / 2, page.Height / 2);
+            gfx.RotateTransform(-45);
+            gfx.DrawString("RentCarsham", new XFont("Arial", 50, XFontStyle.BoldItalic), new XSolidBrush(XColor.FromArgb(50, XColors.Gray)), new XPoint(0, 0), XStringFormats.Center);
+
+            // Guardar en un stream
+            using (var stream = new MemoryStream())
+            {
+                document.Save(stream, false);
+                byte[] pdf = stream.ToArray();
+                return File(pdf, "application/pdf", "ReporteVehiculosF1.pdf");
+            }
+        }
+
     }
 }
