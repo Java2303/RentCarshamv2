@@ -47,7 +47,7 @@ namespace RentCarsham.Controllers
         // GET: Modelos/Create
         public IActionResult Create()
         {
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "MarcaId", "MarcaId");
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "MarcaId", "Nombre");
             return View();
         }
 
@@ -58,13 +58,13 @@ namespace RentCarsham.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ModeloId,Nombre,Caja,CapacidadPersonas,CapacidadMaletero,MarcaId")] Modelo modelo)
         {
-            if (ModelState.IsValid)
+            if (true)
             {
                 _context.Add(modelo);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "MarcaId", "MarcaId", modelo.MarcaId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "MarcaId", "Nombre", modelo.MarcaId);
             return View(modelo);
         }
 
@@ -81,7 +81,7 @@ namespace RentCarsham.Controllers
             {
                 return NotFound();
             }
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "MarcaId", "MarcaId", modelo.MarcaId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "MarcaId", "Nombre", modelo.MarcaId);
             return View(modelo);
         }
 
@@ -97,7 +97,7 @@ namespace RentCarsham.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (true)
             {
                 try
                 {
@@ -117,7 +117,7 @@ namespace RentCarsham.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "MarcaId", "MarcaId", modelo.MarcaId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "MarcaId", "Nombre", modelo.MarcaId);
             return View(modelo);
         }
 
